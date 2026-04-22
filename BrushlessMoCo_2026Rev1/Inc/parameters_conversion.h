@@ -99,7 +99,7 @@
 #define OVERVOLTAGE_THRESHOLD_LOW_d         (uint16_t)(OV_VOLTAGE_THRESHOLD_V * 65535 /\
                                             (ADC_REFERENCE_VOLTAGE / VBUS_PARTITIONING_FACTOR))
 #define UNDERVOLTAGE_THRESHOLD_d            (uint16_t)((UD_VOLTAGE_THRESHOLD_V * 65535) /\
-                                            ((uint16_t)(ADC_REFERENCE_VOLTAGE / VBUS_PARTITIONING_FACTOR)))
+                                            ((float)(ADC_REFERENCE_VOLTAGE / VBUS_PARTITIONING_FACTOR)))
 #define INT_SUPPLY_VOLTAGE                  (uint16_t)(65536 / ADC_REFERENCE_VOLTAGE)
 #define DELTA_TEMP_THRESHOLD                (OV_TEMPERATURE_THRESHOLD_C - T0_C)
 #define DELTA_V_THRESHOLD                   (dV_dT * DELTA_TEMP_THRESHOLD)
