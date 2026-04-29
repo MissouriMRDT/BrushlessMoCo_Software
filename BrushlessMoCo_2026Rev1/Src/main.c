@@ -212,12 +212,23 @@ void SystemClock_Config(void)
 static void MX_NVIC_Init(void)
 {
   /* USART1_IRQn interrupt configuration */
+  __HAL_UART_CLEAR_FLAG(&huart1, UART_CLEAR_OREF);
+  __HAL_UART_CLEAR_FLAG(&huart1, UART_CLEAR_FEF);
+  __HAL_UART_CLEAR_FLAG(&huart1, UART_CLEAR_NEF);
+  __HAL_UART_CLEAR_FLAG(&huart1, UART_CLEAR_PEF);
+  __HAL_UART_CLEAR_FLAG(&huart1, UART_CLEAR_IDLEF);
+  __HAL_UART_CLEAR_FLAG(&huart1, UART_CLEAR_TCF);
+  __HAL_UART_FLUSH_DRREGISTER(&huart1);
   HAL_NVIC_SetPriority(USART1_IRQn, 3, 1);
+  HAL_NVIC_ClearPendingIRQ(USART1_IRQn);
   HAL_NVIC_EnableIRQ(USART1_IRQn);
   /* DMA1_Channel1_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 3, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
   /* TIM1_BRK_TIM15_IRQn interrupt configuration */
+  __HAL_TIM_CLEAR_FLAG(&htim1, TIM_FLAG_BREAK);
+  __HAL_TIM_CLEAR_FLAG(&htim1, TIM_FLAG_BREAK2);
+  __HAL_TIM_CLEAR_FLAG(&htim1, TIM_FLAG_SYSTEM_BREAK);
   HAL_NVIC_SetPriority(TIM1_BRK_TIM15_IRQn, 4, 1);
   HAL_NVIC_EnableIRQ(TIM1_BRK_TIM15_IRQn);
   /* TIM1_UP_TIM16_IRQn interrupt configuration */
@@ -613,7 +624,7 @@ static void MX_I2C3_Init(void)
 
   /* USER CODE END I2C3_Init 1 */
   hi2c3.Instance = I2C3;
-  hi2c3.Init.Timing = 0x00802172;
+  hi2c3.Init.Timing = 0x4052060F;
   hi2c3.Init.OwnAddress1 = 0;
   hi2c3.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c3.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -986,6 +997,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GD_WAKE_GPIO_Port, GD_WAKE_Pin, GPIO_PIN_SET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(Test_GPIO_Port, Test_Pin, GPIO_PIN_RESET);
+
   /*Configure GPIO pin : Start_Stop_Pin */
   GPIO_InitStruct.Pin = Start_Stop_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
@@ -1004,6 +1018,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : Test_Pin */
+  GPIO_InitStruct.Pin = Test_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(Test_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
